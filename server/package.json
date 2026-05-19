@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "@socket.io/redis-adapter": "^8.3.0",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "dotenv": "^9.0.2",
-    "express": "^4.18.2",
+    "express": "^4.22.2",
     "livekit-server-sdk": "^2.15.2",
     "pg": "^8.12.0",
     "redis": "^5.12.1",
-    "socket.io": "^4.6.1",
+    "socket.io": "^4.8.3",
     "uuid": "^9.0.0"
   },
   "engines": {

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  coturn:
+    image: coturn/coturn:latest
+    container_name: videoconf-coturn
+    restart: always
+    network_mode: host  # Required for TURN server
+    volumes:
+      - ./coturn/turnserver.conf:/etc/coturn/turnserver.conf:ro
+      - ./coturn/users.txt:/etc/coturn/users.txt:ro
+      - ./coturn/data:/var/lib/coturn
+    environment:
+      - TZ=America/Toronto
+    cap_add:
+      - NET_ADMIN

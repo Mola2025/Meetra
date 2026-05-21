@@ -1,0 +1,8 @@
+WebRTC Research Notes
+
+- RTCPeerConnection manages peer-to-peer communication
+- getUserMedia is used for camera and microphone access
+- ICE candidates help establish connections
+- Signaling is required using Socket.IO
+- STUN/TURN servers improve connectivity
+- Lobby preview will allow users to test media before joining meetings

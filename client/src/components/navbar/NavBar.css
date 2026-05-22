@@ -1,0 +1,218 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #1e1f2e;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar--scrolled {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- Container ---- */
+.navbar__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ---- Logo ---- */
+.navbar__logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.navbar__logo-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+.navbar__logo-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+/* ---- Spacer ---- */
+.navbar__spacer {
+    flex: 1;
+}
+
+/* ---- Schedule Button ---- */
+.navbar__schedule {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    white-space: nowrap;
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.navbar__schedule-icon {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    opacity: 0.8;
+    /* Tint the SVG to match the text color */
+    filter: brightness(0) invert(1);
+}
+
+.navbar__schedule:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.navbar__schedule:hover .navbar__schedule-icon {
+    opacity: 1;
+}
+
+/* ---- Avatar / Profile Button ---- */
+.navbar__profile-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.navbar__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #6c63ff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.navbar__avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.3);
+}
+
+.navbar__avatar:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.5);
+}
+
+.navbar__avatar-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* ---- Dropdown Menu ---- */
+.navbar__dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background-color: #2a2b3d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    min-width: 170px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    transform-origin: top right;
+}
+
+.navbar__dropdown--open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+
+.navbar__dropdown-header {
+    padding: 0.85rem 1rem 0.65rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.navbar__dropdown-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.navbar__dropdown-email {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: "Inter", "Segoe UI", sans-serif;
+    margin-top: 1px;
+}
+
+.navbar__dropdown-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem 0;
+}
+
+.navbar__dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.55rem 1rem;
+    background: none;
+    border: none;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.navbar__dropdown-item:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.navbar__dropdown-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.07);
+    margin: 0.3rem 0;
+}
+
+.navbar__dropdown-item--danger {
+    color: rgba(255, 100, 100, 0.8);
+}
+
+.navbar__dropdown-item--danger:hover {
+    color: #ff6464;
+    background-color: rgba(255, 100, 100, 0.07);
+}

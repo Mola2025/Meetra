@@ -4,23 +4,26 @@
   "description": "VideoConf Step 7 — Production SaaS architecture",
   "private": true,
   "main": "electron/main/main.cjs",
-  "workspaces": ["client", "server"],
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "dev":        "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "npm run dev --workspace=server",
     "dev:client": "npm run dev --workspace=client",
-    "dev:client:lan":"npm run dev --workspace=client -- --host 0.0.0.0",
-    "dev:email-webhook":"node scripts/dev-email-webhook.mjs",
-    "dev:desktop":"node scripts/run-desktop-env.cjs",
-    "dev:desktop:prod":"node scripts/run-desktop-env.cjs --remote",
-    "dev:desktop:raw":"concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run electron:open\"",
-    "dev:desktop:remote":"electron .",
-    "dev:desktop:lan":"concurrently \"npm run dev:server\" \"npm run dev:client:lan\" \"npm run electron:open\"",
-    "electron:open":"wait-on tcp:4000 tcp:5173 && electron .",
-    "build":      "npm run build --workspace=client",
-    "build:desktop":"npm run build --workspace=client && electron-builder",
+    "dev:client:lan": "npm run dev --workspace=client -- --host 0.0.0.0",
+    "dev:email-webhook": "node scripts/dev-email-webhook.mjs",
+    "dev:desktop": "node scripts/run-desktop-env.cjs",
+    "dev:desktop:prod": "node scripts/run-desktop-env.cjs --remote",
+    "dev:desktop:raw": "concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run electron:open\"",
+    "dev:desktop:remote": "electron .",
+    "dev:desktop:lan": "concurrently \"npm run dev:server\" \"npm run dev:client:lan\" \"npm run electron:open\"",
+    "electron:open": "wait-on tcp:4000 tcp:5173 && electron .",
+    "build": "npm run build --workspace=client",
+    "build:desktop": "npm run build --workspace=client && electron-builder",
     "db:migrate": "npm run db:migrate --workspace=server",
-    "start":      "npm run start --workspace=server"
+    "start": "npm run start --workspace=server"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
@@ -42,5 +45,9 @@
     "win": {
       "target": "nsis"
     }
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "tailwindcss": "^4.3.0"
   }
 }

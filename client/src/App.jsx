@@ -1,13 +1,20 @@
-import "./App.css";
-import MediaPreview from "./components/MediaPreview";
+import { useState } from "react";
 import Lobby from "./components/Lobby";
+import MeetingRoom from "./components/MeetingRoom";
+import "./App.css";
 
 function App() {
+  const [joined, setJoined] = useState(false);
+
   return (
     <section id="center">
       <h1>Meetra WebRTC Test</h1>
-      <MediaPreview />
-      <Lobby />
+
+      {!joined ? (
+        <Lobby onJoin={() => setJoined(true)} />
+      ) : (
+        <MeetingRoom />
+      )}
     </section>
   );
 }

@@ -1,13 +1,17 @@
-function Lobby() {
+import MediaPreview from "./MediaPreview";
+
+function Lobby({ onJoin }) {
   return (
-    <div style={{ marginTop: "30px" }}>
+    <div style={{ textAlign: "center", marginTop: "30px" }}>
+      <MediaPreview />
+
       <h2>Meeting Lobby</h2>
 
-      <p>
-        Configure your camera and microphone before joining the meeting.
-      </p>
+      <p>Configure your camera and microphone before joining the meeting.</p>
 
       <button
+        type="button"
+        onClick={onJoin}
         style={{
           marginTop: "15px",
           padding: "10px 20px",

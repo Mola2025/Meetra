@@ -1,37 +1,53 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import socket from "../socket/socket";
 
 function MeetingRoom() {
   const [roomId, setRoomId] = useState("");
   const [userName, setUserName] = useState("");
   const [joined, setJoined] = useState(false);
-
   const [participants, setParticipants] = useState([]);
-
+  const [stream, setStream] = useState(null);
   const [isMuted, setIsMuted] = useState(false);
-  const [audioTrack, setAudioTrack] = useState(null);
+  const [cameraOff, setCameraOff] = useState(false);
+
+  const videoRef = useRef(null);
 
   useEffect(() => {
     socket.on("room-users", (users) => {
       setParticipants(users);
     });
 
+    socket.on("user-joined", (data) => {
+      setParticipants(data.users || []);
+    });
+
+    socket.on("user-left", (data) => {
+      setParticipants(data.users || []);
+    });
+
     return () => {
       socket.off("room-users");
+      socket.off("user-joined");
+      socket.off("user-left");
     };
   }, []);
+
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream;
+    }
+  }, [stream, joined]);
 
   const joinRoom = async () => {
     if (!roomId || !userName) return;
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
       });
 
-      const track = stream.getAudioTracks()[0];
-      setAudioTrack(track);
+      setStream(mediaStream);
 
       socket.emit("join-room", {
         roomId,
@@ -45,16 +61,47 @@ function MeetingRoom() {
     }
   };
 
-  const toggleMute = () => {
-    if (!audioTrack) return;
+  const leaveRoom = () => {
+    socket.emit("leave-room", {
+      roomId,
+      userName,
+    });
 
-    if (isMuted) {
-      audioTrack.enabled = true;
-      setIsMuted(false);
-    } else {
-      audioTrack.enabled = false;
-      setIsMuted(true);
+    if (stream) {
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
     }
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+
+    setStream(null);
+    setParticipants([]);
+    setJoined(false);
+    setIsMuted(false);
+    setCameraOff(false);
+  };
+
+  const toggleMute = () => {
+    if (!stream) return;
+
+    stream.getAudioTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+
+    setIsMuted(!isMuted);
+  };
+
+  const toggleCamera = () => {
+    if (!stream) return;
+
+    stream.getVideoTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+
+    setCameraOff(!cameraOff);
   };
 
   return (
@@ -63,25 +110,13 @@ function MeetingRoom() {
         minHeight: "100vh",
         background: "#0f1020",
         color: "white",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        paddingTop: "100px",
+        paddingTop: "50px",
+        textAlign: "center",
       }}
     >
-      <h1 style={{ fontSize: "60px" }}>Meetra WebRTC Test</h1>
-
       {!joined ? (
-        <div
-          style={{
-            marginTop: "50px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
-            width: "300px",
-          }}
-        >
-          <h2 style={{ textAlign: "center" }}>Meeting Room</h2>
+        <>
+          <h1>Join Meeting Room</h1>
 
           <input
             type="text"
@@ -90,10 +125,13 @@ function MeetingRoom() {
             onChange={(e) => setUserName(e.target.value)}
             style={{
               padding: "12px",
+              margin: "10px",
               borderRadius: "8px",
-              border: "none",
+              width: "250px",
             }}
           />
+
+          <br />
 
           <input
             type="text"
@@ -102,60 +140,105 @@ function MeetingRoom() {
             onChange={(e) => setRoomId(e.target.value)}
             style={{
               padding: "12px",
+              margin: "10px",
               borderRadius: "8px",
-              border: "none",
+              width: "250px",
             }}
           />
+
+          <br />
 
           <button
             onClick={joinRoom}
             style={{
-              padding: "12px",
+              padding: "12px 20px",
               borderRadius: "8px",
-              border: "none",
               cursor: "pointer",
             }}
           >
             Join Room
           </button>
-        </div>
+        </>
       ) : (
-        <div
-          style={{
-            marginTop: "50px",
-            textAlign: "center",
-          }}
-        >
-          <h2>Meeting Room</h2>
+        <>
+          <h1>Meeting Room</h1>
 
           <h3>Room: {roomId}</h3>
 
-          <p>You joined as: {userName}</p>
+          <p>Joined as: {userName}</p>
 
-          <button
-            onClick={toggleMute}
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
             style={{
+              width: "500px",
+              maxWidth: "90%",
+              borderRadius: "20px",
               marginTop: "20px",
-              padding: "12px 20px",
-              borderRadius: "8px",
-              border: "none",
-              cursor: "pointer",
-              background: isMuted ? "#ff4d4d" : "#4caf50",
-              color: "white",
-              fontWeight: "bold",
+              background: "#000",
             }}
-          >
-            {isMuted ? "Unmute Microphone" : "Mute Microphone"}
-          </button>
+          />
+
+          <div style={{ marginTop: "20px" }}>
+            <button
+              onClick={toggleMute}
+              style={{
+                padding: "12px 20px",
+                marginRight: "10px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: isMuted ? "#ff4d4d" : "#4caf50",
+                color: "white",
+                border: "none",
+              }}
+            >
+              {isMuted ? "Unmute Microphone" : "Mute Microphone"}
+            </button>
+
+            <button
+              onClick={toggleCamera}
+              style={{
+                padding: "12px 20px",
+                marginRight: "10px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: cameraOff ? "#ff4d4d" : "#2196f3",
+                color: "white",
+                border: "none",
+              }}
+            >
+              {cameraOff ? "Turn Camera On" : "Turn Camera Off"}
+            </button>
+
+            <button
+              onClick={leaveRoom}
+              style={{
+                padding: "12px 20px",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: "#777",
+                color: "white",
+                border: "none",
+              }}
+            >
+              Leave Room
+            </button>
+          </div>
 
           <div style={{ marginTop: "40px" }}>
-            <h3>Participants</h3>
+            <h2>Participants</h2>
 
-            {participants.map((user, index) => (
-              <p key={index}>{user}</p>
-            ))}
+            {participants.length === 0 ? (
+              <p>No participants connected</p>
+            ) : (
+              participants.map((user, index) => (
+                <p key={index}>{user.userName}</p>
+              ))
+            )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -1,21 +1,26 @@
-import { useState } from "react";
-import Lobby from "./components/Lobby";
-import MeetingRoom from "./components/MeetingRoom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import Meeting from "./pages/Meeting";
+
 import "./App.css";
 
 function App() {
-  const [joined, setJoined] = useState(false);
-
   return (
-    <section id="center">
-      <h1>Meetra WebRTC Test</h1>
+    <BrowserRouter>
+      <Navbar />
 
-      {!joined ? (
-        <Lobby onJoin={() => setJoined(true)} />
-      ) : (
-        <MeetingRoom />
-      )}
-    </section>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/meeting" element={<Meeting />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

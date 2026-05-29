@@ -1,0 +1,33 @@
+/* ── Primary action card: overrides FeatureCard internals ── */
+.dashboard__action-primary .feature-card {
+    background: linear-gradient(135deg, #6c63ff 0%, #8b7cf8 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dashboard__action-primary .feature-card:hover {
+    background: linear-gradient(135deg, #7b73ff 0%, #9a8bf9 100%);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 12px 40px rgba(108, 99, 255, 0.35);
+}
+
+.dashboard__action-primary .feature-card__icon {
+    color: #ffffff;
+}
+
+.dashboard__action-primary .feature-card__title {
+    color: #ffffff;
+}
+
+.dashboard__action-primary .feature-card__desc {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* ── FAB gradient + shadow (multi-value shadow not expressible inline) ── */
+.dashboard__fab {
+    background: linear-gradient(135deg, #6c63ff, #8b7cf8);
+    box-shadow: 0 6px 24px rgba(108, 99, 255, 0.35);
+}
+
+.dashboard__fab:hover {
+    box-shadow: 0 10px 30px rgba(108, 99, 255, 0.5);
+}

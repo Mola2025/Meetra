@@ -5,6 +5,7 @@ import Home from "../features/home/Home";
 import Auth from "../features/auth/Auth";
 import Profile from "../features/profile/Profile";
 import Dashboard from "../features/dashboard/Dashboard";
+import Onboarding from "../features/onboarding/Onboarding";
 
 
 const AppRoutes = () => {
@@ -17,6 +18,7 @@ const AppRoutes = () => {
         <Route path="/home" element={<Home/>} />
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/onboarding" element={<Onboarding />} />
       </Routes>
       </main>
     </>

@@ -1,0 +1,248 @@
+/* ─── Root & layout ─── */
+
+.onboarding-root {
+    background-color: #13112a;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.onboarding-card {
+    background-color: #13112a;
+}
+
+/* ─── Progress bar ─── */
+
+.progress-seg {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.progress-seg.active {
+    background-color: #8b85ff;
+}
+
+/* ─── Step icon wrapper ─── */
+
+.step-icon-wrap {
+    width: 56px;
+    height: 56px;
+    background-color: rgba(108, 99, 255, 0.2);
+    color: #8b85ff;
+}
+
+.step-icon-wrap svg {
+    width: 26px;
+    height: 26px;
+}
+
+/* ─── Visual card ─── */
+
+.visual-card {
+    background-color: #1e1a3e;
+    min-height: 220px;
+    max-height: 240px;
+}
+
+/* ─── Slide animations ─── */
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutToLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+}
+
+@keyframes slideOutToRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+.slide-in {
+    animation: slideInFromRight 0.22s ease forwards;
+}
+
+.slide-out-left {
+    animation: slideOutToLeft 0.22s ease forwards;
+}
+
+.slide-out-right {
+    animation: slideOutToRight 0.22s ease forwards;
+}
+
+/* ─── Typography ─── */
+
+.step-title {
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.step-desc {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+    max-width: 300px;
+}
+
+.step-counter {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─── Buttons ─── */
+
+.btn-back {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-back:hover {
+    color: #ffffff;
+}
+
+.btn-skip {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.btn-skip:hover {
+    color: #ffffff;
+}
+
+.btn-next {
+    background-color: #6c63ff;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-next:hover {
+    background-color: #8b85ff;
+}
+
+.btn-next:active {
+    transform: scale(0.97);
+}
+
+/* ─── Collaborate avatars ─── */
+
+.avatar-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+}
+
+/* ─── Schedule visual ─── */
+
+.cal-item {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.cal-icon-wrap {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(108, 99, 255, 0.3);
+    color: #8b85ff;
+}
+
+.line-placeholder {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ─── AI visual floating dots ─── */
+
+@keyframes floatDot {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: translateY(-8px);
+        opacity: 0.8;
+    }
+}
+
+.dot-float {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: rgba(108, 99, 255, 0.5);
+    animation: floatDot 3s ease-in-out infinite;
+}
+
+.dot-1 {
+    top: 22%;
+    left: 14%;
+    animation-delay: 0s;
+}
+
+.dot-2 {
+    top: 20%;
+    right: 18%;
+    width: 6px;
+    height: 6px;
+    animation-delay: 0.8s;
+}
+
+.dot-3 {
+    bottom: 20%;
+    right: 14%;
+    animation-delay: 1.6s;
+}
+
+.ai-icon-main {
+    width: 68px;
+    height: 68px;
+    color: #8b85ff;
+    position: relative;
+    z-index: 1;
+}
+
+/* ─── Video & Done icon sizing ─── */
+
+.video-icon-main,
+.done-icon-main {
+    width: 72px;
+    height: 72px;
+    color: rgba(139, 133, 255, 0.75);
+}

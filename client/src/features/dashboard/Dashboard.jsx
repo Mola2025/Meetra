@@ -1,5 +1,6 @@
 import React from "react";
 import FeatureCard from "../../components/home-cards/FeatureCard";
+import {useNavigate} from "react-router-dom";
 import "./Dashboard.css";
 
 //  SVG Icons 
@@ -46,11 +47,14 @@ const VideoIcon = () => (
 // Component 
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   // TODO: Replace with real user data from auth context / API
   const userName = "Username";
 
   // TODO: Wire these handlers to real navigation / modal logic
-  const handleNewMeeting = () => console.log("TODO: start new meeting");
+const handleNewMeeting = () => {
+    navigate("/create-room");
+  };
   const handleJoinMeeting = () => console.log("TODO: open join-meeting modal");
   const handleSchedule = () => console.log("TODO: navigate to calendar");
   const handleJoin = (id) => console.log(`TODO: join meeting ${id}`);

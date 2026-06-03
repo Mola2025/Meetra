@@ -6,6 +6,7 @@ import Auth from "../features/auth/Auth";
 import Profile from "../features/profile/Profile";
 import Dashboard from "../features/dashboard/Dashboard";
 import Onboarding from "../features/onboarding/Onboarding";
+import CreateRoom from "../features/create-room/CreateRoom";
 
 
 const AppRoutes = () => {
@@ -19,6 +20,7 @@ const AppRoutes = () => {
         <Route path="/profile" element={<Profile/>}/>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/create-room" element={<CreateRoom />} />
       </Routes>
       </main>
     </>

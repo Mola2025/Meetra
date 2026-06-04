@@ -8,6 +8,8 @@ import Dashboard from "../features/dashboard/Dashboard";
 import Onboarding from "../features/onboarding/Onboarding";
 import CreateRoom from "../features/create-room/CreateRoom";
 import LobbyWaitingRoom from "../features/lobby-waiting-room/LobbyWaitingRoom";
+import MeetingRoom from "../features/meeting-room/MeetingRoom";
+
 
 
 const AppRoutes = () => {
@@ -23,6 +25,7 @@ const AppRoutes = () => {
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/create-room" element={<CreateRoom />} />
         <Route path="/lobby-waiting-room" element={<LobbyWaitingRoom />} />
+        <Route path="/meeting" element={<MeetingRoom />} />
       </Routes>
       </main>
     </>

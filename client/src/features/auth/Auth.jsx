@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../core/Services/auth_service';
 import './Auth.css';
 
-export default function Auth({ mode: initialMode = 'login', onLogin, onRegister }) {
+export default function Auth({ mode: initialMode = 'login' }) {
+  const { login, register } = useAuth();
+  const navigate = useNavigate();
 
   const [mode, setMode] = useState(initialMode);
 
@@ -25,7 +29,7 @@ export default function Auth({ mode: initialMode = 'login', onLogin, onRegister 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) e.email = 'Valid email required';
     } else {
       if (!fields.email.trim()) e.email = 'Email required';
-    }
+    } 
     if (fields.password.length < 6) e.password = 'At least 6 characters';
     return e;
   })();
@@ -48,10 +52,12 @@ export default function Auth({ mode: initialMode = 'login', onLogin, onRegister 
     setIsSubmitting(true);
     try {
       if (mode === 'register') {
-        await onRegister?.({ name: fields.name, email: fields.email, password: fields.password });
+        await register({ name: fields.name, email: fields.email, password: fields.password });
       } else {
-        await onLogin?.({ email: fields.email, password: fields.password });
+        await login({ email: fields.email, password: fields.password });
       }
+      // Redirect to dashboard after successful auth
+      navigate('/dashboard');
     } catch (error) {
       setErrorMessage(
         error?.response?.data?.message ?? error?.message ??

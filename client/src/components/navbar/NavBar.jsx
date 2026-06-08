@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../core/Services/auth_service";
 import "./NavBar.css";
 
 import videoCallIcon from "../../assets/video-call-icon.svg";
@@ -11,6 +12,9 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const dropdownRef = useRef(null);
+
+  // Get user info and logout function from auth context
+  const { user, logout } = useAuth(); 
 
   // Detects scroll of the page and add shadow to the navbar and resets when is at the top
   useEffect(() => {
@@ -83,8 +87,8 @@ const Navbar = () => {
             role="menu"
           >
             <div className="navbar__dropdown-header">
-              <div className="navbar__dropdown-name">John Doe</div>
-              <div className="navbar__dropdown-email">john@example.com</div>
+              <div className="navbar__dropdown-name">{user?.name || "User"}</div>
+              <div className="navbar__dropdown-email">{user?.email || "user@example.com"}</div>
             </div>
 
             <ul className="navbar__dropdown-list">
@@ -118,6 +122,7 @@ const Navbar = () => {
                   onClick={() => {
                     setDropdownOpen(false);
                     // TODO: Logout logic here
+                    logout();
                   }}
                 >
                   Log out

@@ -11,14 +11,16 @@
   },
   "dependencies": {
     "@socket.io/redis-adapter": "^8.3.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^9.0.2",
     "express": "^4.22.2",
+    "jsonwebtoken": "^9.0.3",
     "livekit-server-sdk": "^2.15.2",
     "pg": "^8.12.0",
     "redis": "^5.12.1",
     "socket.io": "^4.8.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "engines": {
     "node": ">=18"

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { Server } from "socket.io";
 
 import authRoutes from "./routes/AuthenticationRoutes.js";
+import profileRoutes from "./routes/ProfileRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.get("/", (req, res) => res.json({ status: "Meetra server is running" }));
 
 app.use("/auth", authRoutes);
+app.use("/hub", profileRoutes);
 
 // Socket.IO
 

@@ -3,6 +3,7 @@ import http from "http";
 import cors from "cors";
 import dotenv from "dotenv";
 import { Server } from "socket.io";
+import { handleSocketConnection } from "../socket/socketHandler.js";
 
 import authRoutes from "./routes/AuthenticationRoutes.js";
 import profileRoutes from "./routes/ProfileRoutes.js";
@@ -37,13 +38,7 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
-  console.log("User connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
-  });
-});
+handleSocketConnection(io);
 
 // Start Server
 

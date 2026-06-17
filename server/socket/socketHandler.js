@@ -19,29 +19,23 @@ export const handleSocketConnection = (io) => {
       });
 
       io.to(roomId).emit(SOCKET_EVENTS.ROOM_USERS, activeRooms[roomId]);
-
-      io.to(roomId).emit(SOCKET_EVENTS.USER_JOINED, {
+      socket.to(roomId).emit(SOCKET_EVENTS.USER_JOINED, {
         socketId: socket.id,
         userName,
-        roomId,
-        users: activeRooms[roomId],
       });
     });
 
     socket.on(SOCKET_EVENTS.LEAVE_ROOM, ({ roomId, userName }) => {
       socket.leave(roomId);
 
-      if (activeRooms[roomId]) {
-        activeRooms[roomId] = activeRooms[roomId].filter(
-          (user) => user.socketId !== socket.id
-        );
-      }
+      activeRooms[roomId] = (activeRooms[roomId] || []).filter(
+        (user) => user.socketId !== socket.id
+      );
 
-      io.to(roomId).emit(SOCKET_EVENTS.USER_LEFT, {
+      io.to(roomId).emit(SOCKET_EVENTS.ROOM_USERS, activeRooms[roomId]);
+      socket.to(roomId).emit(SOCKET_EVENTS.USER_LEFT, {
         socketId: socket.id,
         userName,
-        roomId,
-        users: activeRooms[roomId] || [],
       });
     });
 
@@ -59,23 +53,6 @@ export const handleSocketConnection = (io) => {
 
     socket.on("disconnect", () => {
       console.log("User disconnected:", socket.id);
-
-      for (const roomId in activeRooms) {
-        const user = activeRooms[roomId].find(
-          (roomUser) => roomUser.socketId === socket.id
-        );
-
-        activeRooms[roomId] = activeRooms[roomId].filter(
-          (roomUser) => roomUser.socketId !== socket.id
-        );
-
-        io.to(roomId).emit(SOCKET_EVENTS.USER_LEFT, {
-          socketId: socket.id,
-          userName: user?.userName || "Unknown user",
-          roomId,
-          users: activeRooms[roomId],
-        });
-      }
     });
   });
 };

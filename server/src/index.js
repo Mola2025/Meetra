@@ -13,23 +13,21 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-// Middleware
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
-  }),
+  })
 );
+
 app.use(express.json());
 
-// Routes
-
-app.get("/", (req, res) => res.json({ status: "Meetra server is running" }));
+app.get("/", (req, res) => {
+  res.json({ status: "Meetra server is running" });
+});
 
 app.use("/auth", authRoutes);
 app.use("/hub", profileRoutes);
-
-// Socket.IO
 
 const io = new Server(server, {
   cors: {
@@ -39,8 +37,6 @@ const io = new Server(server, {
 });
 
 handleSocketConnection(io);
-
-// Start Server
 
 const PORT = process.env.PORT || 4000;
 

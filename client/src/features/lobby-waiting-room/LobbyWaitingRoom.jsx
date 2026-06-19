@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./LobbyWaitingRoom.css";
 
 function CameraIcon({ muted }) {
@@ -59,6 +60,7 @@ export default function LobbyWaitingRoom({
   hostName = "Sarah Johnson",
   participantCount = 8,
   userInitials = "JD",
+  userName = "You",
   features = "Screen sharing, recording, AI transcription enabled",
   onJoin,
   onCancel,
@@ -69,6 +71,62 @@ export default function LobbyWaitingRoom({
   const [microphone, setMicrophone] = useState("Built-in Microphone");
   const [speaker, setSpeaker] = useState("Built-in Speaker");
   const [waitingApproval, setWaitingApproval] = useState(false);
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const roomId = searchParams.get("room") || "room1";
+
+  const localVideoRef = useRef(null);
+  const localStreamRef = useRef(null);
+
+  useEffect(() => {
+    startLocalMedia();
+    return () => stopLocalMedia();
+  }, []);
+
+  const startLocalMedia = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+
+      localStreamRef.current = stream;
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error("Camera preview error:", error);
+    }
+  };
+
+  const stopLocalMedia = () => {
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => track.stop());
+      localStreamRef.current = null;
+    }
+  };
+
+  const handleToggleCamera = () => {
+    if (!localStreamRef.current) return;
+
+    localStreamRef.current.getVideoTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+
+    setCameraOn((v) => !v);
+  };
+
+  const handleToggleMic = () => {
+    if (!localStreamRef.current) return;
+
+    localStreamRef.current.getAudioTracks().forEach((track) => {
+      track.enabled = !track.enabled;
+    });
+
+    setMicOn((v) => !v);
+  };
 
   const cameraOptions = ["Built-in Camera", "External Webcam", "Virtual Camera"];
   const micOptions = ["Built-in Microphone", "External Microphone", "Headset Mic"];
@@ -83,22 +141,34 @@ export default function LobbyWaitingRoom({
 
           {/* Camera preview */}
           <div className="lwr-preview-card flex flex-col items-center justify-between rounded-2xl overflow-hidden">
-            <div className="lwr-preview-area flex flex-col items-center justify-center flex-1 w-full gap-3 py-8">
-              <div className="lwr-avatar flex items-center justify-center rounded-full font-bold">
-                {userInitials}
-              </div>
-              <span className="lwr-preview-label text-sm">Camera Preview</span>
+            <div className="lwr-preview-area flex flex-col items-center justify-center flex-1 w-full gap-3 py-8 relative">
+              <video
+                ref={localVideoRef}
+                autoPlay
+                playsInline
+                muted
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ display: cameraOn ? "block" : "none" }}
+              />
+              {!cameraOn && (
+                <>
+                  <div className="lwr-avatar flex items-center justify-center rounded-full font-bold z-10">
+                    {userInitials}
+                  </div>
+                  <span className="lwr-preview-label text-sm z-10">Camera Off</span>
+                </>
+              )}
             </div>
             <div className="lwr-controls flex items-center gap-3 pb-5">
               <button
-                onClick={() => setCameraOn((v) => !v)}
+                onClick={handleToggleCamera}
                 className={`lwr-ctrl-btn flex items-center justify-center rounded-full transition-all duration-200 ${!cameraOn ? "lwr-ctrl-btn--muted" : ""}`}
                 title={cameraOn ? "Turn off camera" : "Turn on camera"}
               >
                 <CameraIcon muted={!cameraOn} />
               </button>
               <button
-                onClick={() => setMicOn((v) => !v)}
+                onClick={handleToggleMic}
                 className={`lwr-ctrl-btn flex items-center justify-center rounded-full transition-all duration-200 ${!micOn ? "lwr-ctrl-btn--muted" : ""}`}
                 title={micOn ? "Mute microphone" : "Unmute microphone"}
               >
@@ -183,15 +253,9 @@ export default function LobbyWaitingRoom({
             <div className="flex flex-col rounded-2xl overflow-hidden">
                 <button
                 onClick={() => {
-                    setWaitingApproval(true);
+                    stopLocalMedia();
 
-                    onJoin?.({
-                    camera,
-                    microphone,
-                    speaker,
-                    cameraOn,
-                    micOn,
-                    });
+                    navigate(`/meeting?room=${roomId}&name=${encodeURIComponent(userName)}`);
                 }}
                 className="lwr-btn-join py-4 text-sm font-bold tracking-widest transition-all duration-200"
                 >
@@ -199,7 +263,10 @@ export default function LobbyWaitingRoom({
                 </button>
 
                 <button
-                onClick={() => onCancel?.()}
+                onClick={() => {
+                    stopLocalMedia();
+                    navigate("/home");
+                }}
                 className="lwr-btn-cancel py-4 text-sm font-bold tracking-widest transition-all duration-200"
                 >
                 CANCEL

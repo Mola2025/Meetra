@@ -2,5 +2,5 @@
 
 export const environment = {
   //   apiUrl: "https://tournament-platform-backend.onrender.com",
-  apiUrl: "http://localhost:5000",
+  apiUrl: "http://localhost:4000",
 };

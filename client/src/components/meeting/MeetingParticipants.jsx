@@ -1,17 +1,19 @@
-const PARTICIPANTS = [
-  { id: 1, name: "Sarah Johnson", initials: "SJ", avatarColor: "#6c63ff", status: "Speaking...", isMuted: false },
-  { id: 2, name: "Michael Chen",  initials: "MC", avatarColor: "#9c4dcc", status: null,         isMuted: false },
-  { id: 3, name: "Emily Rodriguez", initials: "ER", avatarColor: "#7c3aed", status: null,       isMuted: true  },
-  { id: 4, name: "James Wilson",  initials: "JW", avatarColor: "#4a4080", status: null,         isMuted: false },
-  { id: 5, name: "You",           initials: "JD", avatarColor: "#3d3a7c", status: null,         isMuted: false },
-];
+export default function MeetingParticipants({ onClose, participants = [] }) {
+  const list = participants.length > 0
+    ? participants.map((p) => ({
+        id: p.socketId,
+        name: p.userName,
+        initials: p.userName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "?",
+        avatarColor: "#6c63ff",
+        status: null,
+        isMuted: false,
+      }))
+    : [];
 
-export default function MeetingParticipants({ onClose }) {
   return (
     <aside className="side-panel flex flex-col h-full">
-      {/* Header */}
       <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-        <h2 className="text-white font-semibold text-base">Participants</h2>
+        <h2 className="text-white font-semibold text-base">Participants ({list.length})</h2>
         <button
           onClick={onClose}
           aria-label="Close participants"
@@ -25,14 +27,12 @@ export default function MeetingParticipants({ onClose }) {
         </button>
       </div>
 
-      {/* List */}
       <ul className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-2">
-        {PARTICIPANTS.map((p) => (
+        {list.map((p) => (
           <li
             key={p.id}
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors duration-150"
           >
-            {/* Avatar */}
             <div
               className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-semibold flex-shrink-0"
               style={{ backgroundColor: p.avatarColor }}
@@ -40,7 +40,6 @@ export default function MeetingParticipants({ onClose }) {
               {p.initials}
             </div>
 
-            {/* Name + status */}
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-white text-sm font-medium truncate">{p.name}</span>
               {p.status && (
@@ -48,7 +47,6 @@ export default function MeetingParticipants({ onClose }) {
               )}
             </div>
 
-            {/* Muted icon */}
             {p.isMuted && (
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                 stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"

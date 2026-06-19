@@ -10,13 +10,13 @@ CREATE TABLE users (
     id TEXT PRIMARY KEY,
     email TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'member',
+    role TEXT NOT NULL DEFAULT 'user',
     password_hash TEXT NOT NULL,
     created_at BIGINT NOT NULL,
     updated_at BIGINT NOT NULL,
     last_login_at BIGINT NULL,
     CONSTRAINT chk_users_role 
-        CHECK (role IN ('admin', 'host', 'member', 'guest'))
+        CHECK (role IN ('super_admin', 'admin', 'host', 'co_host', 'user', 'guest'))
 );
 
 CREATE TABLE meetings (
@@ -72,13 +72,13 @@ CREATE TABLE transcript_segments (
 CREATE TABLE hub_profiles (
     email TEXT PRIMARY KEY,
     name TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'member',
+    role TEXT NOT NULL DEFAULT 'user',
     presence_status TEXT NOT NULL DEFAULT 'available',
     created_at BIGINT NOT NULL,
     updated_at BIGINT NOT NULL,
     last_seen_at BIGINT NOT NULL,
     CONSTRAINT chk_hub_role
-        CHECK (role IN ('admin', 'host', 'member', 'guest')),
+        CHECK (role IN ('super_admin', 'admin', 'host', 'co_host', 'user', 'guest')),
     CONSTRAINT chk_presence_status
         CHECK (presence_status IN ('available', 'busy', 'offline', 'in_meeting'))
 );

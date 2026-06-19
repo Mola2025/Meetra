@@ -107,6 +107,12 @@ export default function MeetingRoom() {
     };
   }, []);
 
+  useEffect(() => {
+    if (isCamOn && localVideoRef.current && localStreamRef.current) {
+      localVideoRef.current.srcObject = localStreamRef.current;
+    }
+  }, [isCamOn]);
+
   const togglePanel = (panel) => {
     setActivePanel((prev) => (prev === panel ? null : panel));
   };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "./CreateRoom.css";
 
 function Toggle({ checked, onChange, label }) {
@@ -32,7 +32,10 @@ function CheckIcon() {
   );
 }
 
+import { useNavigate } from "react-router-dom";
+
 export default function CreateRoom({ onStart, onSchedule }) {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [copied, setCopied] = useState(false);
@@ -43,7 +46,8 @@ export default function CreateRoom({ onStart, onSchedule }) {
     muteOnEntry: false,
   });
 
-  const meetingLink = "https://meetra.app/join/abc-xyz-123";
+  const roomId = useMemo(() => crypto.randomUUID(), []);
+  const meetingLink = `${window.location.origin}/lobby-waiting-room?room=${roomId}`;
 
   const toggleSetting = (key) => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -133,13 +137,25 @@ export default function CreateRoom({ onStart, onSchedule }) {
         {/* Actions */}
         <div className="flex items-center gap-4 pt-1">
           <button
-            onClick={() => onStart?.({ title, description, settings })}
+            onClick={() => {
+              if (onStart) {
+                onStart({ title, description, settings });
+              } else {
+                navigate(`/lobby-waiting-room?room=${roomId}&name=You`);
+              }
+            }}
             className="cr-btn-primary flex-1 py-4 rounded-xl text-sm font-bold tracking-widest transition-all duration-200"
           >
             START MEETING NOW
           </button>
           <button
-            onClick={() => onSchedule?.({ title, description, settings })}
+            onClick={() => {
+              if (onSchedule) {
+                onSchedule({ title, description, settings });
+              } else {
+                navigate("/dashboard");
+              }
+            }}
             className="cr-btn-secondary flex-1 py-4 rounded-xl text-sm font-bold tracking-widest transition-all duration-200"
           >
             SCHEDULE FOR LATER

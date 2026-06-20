@@ -55,9 +55,9 @@ const Dashboard = () => {
 const handleNewMeeting = () => {
     navigate("/create-room");
   };
-  const handleJoinMeeting = () => console.log("TODO: open join-meeting modal");
-  const handleSchedule = () => console.log("TODO: navigate to calendar");
-  const handleJoin = (id) => console.log(`TODO: join meeting ${id}`);
+  const handleJoinMeeting = () => navigate("/lobby-waiting-room");
+  const handleSchedule = () => navigate("/create-room");
+  const handleJoin = (id) => navigate(`/lobby-waiting-room?room=${id}`);
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-[#12131f] px-8 pt-10 pb-24 relative">
